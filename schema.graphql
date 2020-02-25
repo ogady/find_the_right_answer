@@ -1,0 +1,31 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+# Topicのデータ保持
+type Topic {
+  startChar: StartChar!
+  topicPiece: TopicPiece!
+  numOfLikes: Int
+}
+
+# TopicPieceのデータ保持
+type TopicPiece {
+  topicPiece: String!
+}
+
+# StartCharのデータ保持
+type StartChar {
+  startChar: String!
+}
+
+type Query {
+  topic: Topic!
+}
+
+input NewTopicPiece {
+  topicPiece: String!
+}
+
+type Mutation {
+  addTopicPiece(input: NewTopicPiece!): TopicPiece
+}
