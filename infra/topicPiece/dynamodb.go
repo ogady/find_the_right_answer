@@ -4,11 +4,10 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/guregu/dynamo"
 	"github.com/ogady/find_the_right_answer/domain/model"
 	"github.com/ogady/find_the_right_answer/domain/repository"
+	awsInfra "github.com/ogady/find_the_right_answer/infra/aws"
 )
 
 type TopicPieceRepoImpl struct {
@@ -18,9 +17,8 @@ type TopicPieceRepoImpl struct {
 
 func NewTopicPieceRepoImpl() repository.TopicPieceRepository {
 
-	db := dynamo.New(session.New(), &aws.Config{
-		Region: aws.String("ap-northeast-1"),
-	})
+	db := awsInfra.NewDynamoDBConn()
+
 	table := db.Table("topic_piece")
 	topicPieceRepoImpl := &TopicPieceRepoImpl{
 		dynamoDB: db,
