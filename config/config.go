@@ -6,7 +6,9 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
-const confDir = "./env/" //　設定ファイルへの実行ファイルからの相対パスを指定
+const confDir = "./config/env/" //　設定ファイルへの実行ファイルからの相対パスを指定
+
+var DynamoDB DynamoDBConf
 
 type Config struct { // toml内の名前を入れる
 	DynamoDB DynamoDBConf `toml:"dynamodb"`
@@ -41,6 +43,8 @@ func newConfig(path string, env string) error {
 	if _, err := toml.DecodeFile(confPath, &conf); err != nil {
 		return err
 	}
+
+	DynamoDB = conf.DynamoDB
 
 	return nil
 }
