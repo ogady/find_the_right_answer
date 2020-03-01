@@ -1,6 +1,6 @@
 module github.com/ogady/find_the_right_answer
 
-go 1.13
+go 1.14
 
 require (
 	github.com/99designs/gqlgen v0.11.1

@@ -1,0 +1,16 @@
+api:
+  build: ./
+  ports:
+    - 8000:8080
+  volumes:
+    - ./api:/go/src/github.com/ogady/find_the_right_answer
+  links:
+    - database
+  environment:
+    - ENV=dev
+
+database:
+  image: amazon/dynamodb-local
+  container_name: "dynamodb-local"
+  ports:
+    - 8001:8001
