@@ -44,4 +44,4 @@ models:
   StartChar:
     model: github.com/ogady/find_the_right_answer/domain/model.StartChar
   NewTopicPiece:
-    model: github.com/ogady/find_the_right_answer/domain/model.NewTopicPiece
+    model: github.com/ogady/find_the_right_answer/domain/model.TopicPiece

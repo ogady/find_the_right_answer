@@ -44,7 +44,7 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Mutation struct {
-		AddTopicPiece func(childComplexity int, input model.NewTopicPiece) int
+		AddTopicPiece func(childComplexity int, input model.TopicPiece) int
 	}
 
 	Query struct {
@@ -67,7 +67,7 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	AddTopicPiece(ctx context.Context, input model.NewTopicPiece) (*model.TopicPiece, error)
+	AddTopicPiece(ctx context.Context, input model.TopicPiece) (*model.TopicPiece, error)
 }
 type QueryResolver interface {
 	Topic(ctx context.Context) (*model.Topic, error)
@@ -98,7 +98,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.AddTopicPiece(childComplexity, args["input"].(model.NewTopicPiece)), true
+		return e.complexity.Mutation.AddTopicPiece(childComplexity, args["input"].(model.TopicPiece)), true
 
 	case "Query.topic":
 		if e.complexity.Query.Topic == nil {
@@ -248,9 +248,9 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 func (ec *executionContext) field_Mutation_addTopicPiece_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.NewTopicPiece
+	var arg0 model.TopicPiece
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNNewTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋdomainᚋmodelᚐNewTopicPiece(ctx, tmp)
+		arg0, err = ec.unmarshalNNewTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋdomainᚋmodelᚐTopicPiece(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -333,7 +333,7 @@ func (ec *executionContext) _Mutation_addTopicPiece(ctx context.Context, field g
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().AddTopicPiece(rctx, args["input"].(model.NewTopicPiece))
+		return ec.resolvers.Mutation().AddTopicPiece(rctx, args["input"].(model.TopicPiece))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1672,8 +1672,8 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputNewTopicPiece(ctx context.Context, obj interface{}) (model.NewTopicPiece, error) {
-	var it model.NewTopicPiece
+func (ec *executionContext) unmarshalInputNewTopicPiece(ctx context.Context, obj interface{}) (model.TopicPiece, error) {
+	var it model.TopicPiece
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
@@ -2117,7 +2117,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalNNewTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋdomainᚋmodelᚐNewTopicPiece(ctx context.Context, v interface{}) (model.NewTopicPiece, error) {
+func (ec *executionContext) unmarshalNNewTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋdomainᚋmodelᚐTopicPiece(ctx context.Context, v interface{}) (model.TopicPiece, error) {
 	return ec.unmarshalInputNewTopicPiece(ctx, v)
 }
 

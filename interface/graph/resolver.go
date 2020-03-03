@@ -8,14 +8,14 @@ import (
 
 	model "github.com/ogady/find_the_right_answer/domain/model"
 	"github.com/ogady/find_the_right_answer/interface/graph/generated"
-
 	"github.com/ogady/find_the_right_answer/usecase"
 )
 
 type Resolver struct{}
 
-func (r *mutationResolver) AddTopicPiece(ctx context.Context, input model.NewTopicPiece) (*model.TopicPiece, error) {
-	err := usecase.AddTopicPieceUsecase(&input)
+func (r *mutationResolver) AddTopicPiece(ctx context.Context, input model.TopicPiece) (*model.TopicPiece, error) {
+	u := usecase.NewAddTopicPieceUsecase()
+	err := u.AddTopicPiece(&input)
 	if err != nil {
 		return nil, err
 	}
@@ -23,7 +23,8 @@ func (r *mutationResolver) AddTopicPiece(ctx context.Context, input model.NewTop
 }
 
 func (r *queryResolver) Topic(ctx context.Context) (*model.Topic, error) {
-	topic, err := usecase.CreateTopicUsecase()
+	u := usecase.NewCreateTopicUsecase()
+	topic, err := u.CreateTopic()
 	if err != nil {
 		return nil, err
 	}

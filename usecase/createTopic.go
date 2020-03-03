@@ -5,22 +5,39 @@ import (
 	"strings"
 
 	"github.com/ogady/find_the_right_answer/domain/model"
+	"github.com/ogady/find_the_right_answer/domain/repository"
 	startCharInfra "github.com/ogady/find_the_right_answer/infra/startChar"
 	topicInfra "github.com/ogady/find_the_right_answer/infra/topic"
 	topicPieceInfra "github.com/ogady/find_the_right_answer/infra/topicPiece"
 )
 
-func CreateTopicUsecase() (model.Topic, error) {
+type createTopicUsecase struct {
+	topicPieceRepo repository.TopicPieceRepository
+	startChartRepo repository.StartCharRepository
+	topicRepo      repository.TopicRepository
+}
+
+// NewCreateTopicUsecase -
+func NewCreateTopicUsecase() createTopicUsecase {
+	tpRepo := topicPieceInfra.NewTopicPieceRepoImpl()
+	stRepo := startCharInfra.NewStartCharRepoImpl()
+	tRepo := topicInfra.NewTopicRepoImpl()
+	ctUsecase := createTopicUsecase{
+		topicPieceRepo: tpRepo,
+		startChartRepo: stRepo,
+		topicRepo:      tRepo,
+	}
+	return ctUsecase
+}
+
+func (r *createTopicUsecase) CreateTopic() (model.Topic, error) {
 	var topic model.Topic
 	var err error
-	stRepo := startCharInfra.NewStartCharRepoImpl()
-	tpRepo := topicPieceInfra.NewTopicPieceRepoImpl()
-	tRepo := topicInfra.NewTopicRepoImpl()
 
-	startChar := stRepo.FindRandom()
+	startChar := r.startChartRepo.FindRandom()
 	fmt.Println(startChar)
 
-	topicPiece, err := tpRepo.FindRandom()
+	topicPiece, err := r.topicPieceRepo.FindRandom()
 	if err != nil {
 		return topic, err
 	}
@@ -32,7 +49,7 @@ func CreateTopicUsecase() (model.Topic, error) {
 		TopicPiece: topicPiece,
 	}
 
-	err = tRepo.Save(&topic)
+	err = r.topicRepo.Save(&topic)
 
 	if err != nil {
 		switch {
