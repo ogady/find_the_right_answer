@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/ogady/find_the_right_answer/domain/model"
@@ -35,14 +34,11 @@ func (r *createTopicUsecase) CreateTopic() (model.Topic, error) {
 	var err error
 
 	startChar := r.startChartRepo.FindRandom()
-	fmt.Println(startChar)
 
 	topicPiece, err := r.topicPieceRepo.FindRandom()
 	if err != nil {
 		return topic, err
 	}
-
-	fmt.Println(topicPiece)
 
 	topic = model.Topic{
 		StartChar:  startChar,
