@@ -19,7 +19,7 @@ type DynamoDBConf struct {
 	Endpoint string `toml:"endpoint"`
 }
 
-func init() {
+func InitConf() error {
 	var err error
 
 	env := os.Getenv("ENV")
@@ -30,9 +30,9 @@ func init() {
 	// Get configuration
 	err = newConfig(confDir, env) // 引数に渡す
 	if err != nil {
-		panic(err.Error())
+		return err
 	}
-
+	return err
 }
 
 // NewConfig return configuration struct.

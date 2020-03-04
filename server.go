@@ -1,8 +1,11 @@
 package main
 
 import (
+	"log"
+
 	"github.com/99designs/gqlgen/handler"
 	"github.com/gin-gonic/gin"
+	"github.com/ogady/find_the_right_answer/config"
 	"github.com/ogady/find_the_right_answer/interface/graph"
 	"github.com/ogady/find_the_right_answer/interface/graph/generated"
 )
@@ -24,7 +27,13 @@ func playgroundHandler() gin.HandlerFunc {
 	return func(c *gin.Context) { h.ServeHTTP(c.Writer, c.Request) }
 }
 
-func main() { // Setting up Gin
+func main() {
+	err := config.InitConf()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	r := gin.Default()
 	r.POST("/query", graphqlHandler())
 	r.GET("/", playgroundHandler())
