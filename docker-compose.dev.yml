@@ -3,7 +3,7 @@ services:
   api:
     build: ./
     ports:
-      - 8080:8080
+      - 80:80
     volumes:
       - ./api:/go/src/github.com/ogady/find_the_right_answer
     environment:

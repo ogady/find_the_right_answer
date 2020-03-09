@@ -11,9 +11,13 @@ import (
 func NewDynamoDBConn() *dynamo.DB {
 
 	db := dynamo.New(session.New(), &aws.Config{
-		Region:      aws.String(config.DynamoDB.Region),
-		Endpoint:    aws.String(config.DynamoDB.Endpoint),
-		Credentials: credentials.NewStaticCredentials("dummy", "dummy", "dummy"),
+		Region:   aws.String(config.DynamoDB.Region),
+		Endpoint: aws.String(config.DynamoDB.Endpoint),
+		Credentials: credentials.NewStaticCredentials(
+			config.DynamoDB.AccessKey,
+			config.DynamoDB.SecretKey,
+			config.DynamoDB.SessionToken,
+		),
 	})
 	return db
 }

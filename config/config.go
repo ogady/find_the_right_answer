@@ -15,8 +15,11 @@ type Config struct { // toml内の名前を入れる
 }
 
 type DynamoDBConf struct {
-	Region   string `toml:"region"`
-	Endpoint string `toml:"endpoint"`
+	Region       string `toml:"region"`
+	Endpoint     string `toml:"endpoint"`
+	AccessKey    string `toml:"access_key"`
+	SecretKey    string `toml:"secret_key"`
+	SessionToken string `toml:"session_token"`
 }
 
 func InitConf() error {

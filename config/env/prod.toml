@@ -1,3 +1,6 @@
 [dynamodb]
 region = "ap-northeast-1"
-endpoint = "http://localhost:8000"
+endpoint = ""
+access_key = ""
+secret_key = ""
+session_token = ""

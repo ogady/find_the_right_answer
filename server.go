@@ -37,5 +37,5 @@ func main() {
 	r := gin.Default()
 	r.POST("/query", graphqlHandler())
 	r.GET("/", playgroundHandler())
-	r.Run()
+	r.Run(":80")
 }
