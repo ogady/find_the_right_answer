@@ -1,18 +1,28 @@
+variable "env" {}
+variable "vpc_id" {}
+variable "sub_sub_0_id" {}
+variable "sub_sub_1_id" {}
+variable "http_sg_id" {}
+variable "https_sg_id" {}
+variable "http_redirect_sg_id" {}
+
 resource "aws_lb" "alb" {
-  name               = "FTRA-ALB"
+  name               = "FTRA-${var.env}-ALB"
   load_balancer_type = "application"
   internal           = false
   idle_timeout       = 60
   subnets = [
-    aws_subnet.pub_subnet_0.id,
-    aws_subnet.pub_subnet_1.id,
+    var.sub_sub_0_id,
+    var.sub_sub_1_id,
   ]
   security_groups = [
-    module.http_sg.security_group_id,
-    module.https_sg.security_group_id,
-    module.http_redirect_sg.security_group_id
+    var.http_sg_id,
+    var.https_sg_id,
+    var.http_redirect_sg_id,
   ]
-
+  tags = {
+    Name = "FTRA-${var.env}-ALB"
+  }
 }
 
 resource "aws_lb_listener" "http" {
@@ -31,12 +41,12 @@ resource "aws_lb_listener" "http" {
 resource "aws_lb_target_group" "alb_tg" {
   name                 = "FTRA-ALB-TG"
   target_type          = "ip"
-  vpc_id               = aws_vpc.vpc.id
-  port                 = 8080
+  vpc_id               = var.vpc_id
+  port                 = 80
   protocol             = "HTTP"
   deregistration_delay = 300
   health_check {
-    path                = "/"
+    path                = "/playground"
     healthy_threshold   = 5
     unhealthy_threshold = 2
     timeout             = 5
@@ -46,7 +56,7 @@ resource "aws_lb_target_group" "alb_tg" {
     protocol            = "HTTP"
   }
   tags = {
-    Name = "FTRA_ALB_TG"
+    Name = "FTRA_${var.env}_ALB_TG"
   }
   depends_on = [aws_lb.alb]
 }
