@@ -154,10 +154,10 @@ resource "aws_route_table_association" "pub_sub_1_route" {
 }
 
 
-output "sub_sub_0_id" {
+output "pub_sub_0_id" {
   value = aws_subnet.pub_subnet_0.id
 }
 
-output "sub_sub_1_id" {
+output "pub_sub_1_id" {
   value = aws_subnet.pub_subnet_1.id
 }

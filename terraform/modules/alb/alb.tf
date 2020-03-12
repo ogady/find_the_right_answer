@@ -1,7 +1,7 @@
 variable "env" {}
 variable "vpc_id" {}
-variable "sub_sub_0_id" {}
-variable "sub_sub_1_id" {}
+variable "pub_sub_0_id" {}
+variable "pub_sub_1_id" {}
 variable "http_sg_id" {}
 variable "https_sg_id" {}
 variable "http_redirect_sg_id" {}
@@ -12,8 +12,8 @@ resource "aws_lb" "alb" {
   internal           = false
   idle_timeout       = 60
   subnets = [
-    var.sub_sub_0_id,
-    var.sub_sub_1_id,
+    var.pub_sub_0_id,
+    var.pub_sub_1_id,
   ]
   security_groups = [
     var.http_sg_id,
@@ -69,8 +69,9 @@ resource "aws_lb_listener_rule" "alb_listener_rule" {
     target_group_arn = aws_lb_target_group.alb_tg.arn
   }
   condition {
-    field  = "path-pattern"
-    values = ["/*"]
+    path_pattern {
+      values = ["/*"]
+    }
   }
 
 }
