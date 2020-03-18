@@ -19,6 +19,7 @@ module "alb" {
   http_sg_id          = module.http_sg.security_group_id
   https_sg_id         = module.https_sg.security_group_id
   http_redirect_sg_id = module.http_redirect_sg.security_group_id
+  certificate_arn     = module.route53.certificate_arn
 }
 
 module "http_sg" {
@@ -43,5 +44,11 @@ module "http_redirect_sg" {
   vpc_id      = module.vpc.vpc_id
   port        = 8080
   cidr_blocks = ["0.0.0.0/0"]
+}
+
+module "route53" {
+  source       = "../../../modules/route53"
+  alb_dns_name = module.alb.alb_dns_name
+  alb_zone_id  = module.alb.alb_zone_id
 }
 

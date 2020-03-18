@@ -5,6 +5,7 @@ variable "pub_sub_1_id" {}
 variable "http_sg_id" {}
 variable "https_sg_id" {}
 variable "http_redirect_sg_id" {}
+variable "certificate_arn" {}
 
 resource "aws_lb" "alb" {
   name               = "FTRA-${var.env}-ALB"
@@ -38,6 +39,39 @@ resource "aws_lb_listener" "http" {
     }
   }
 }
+
+
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  certificate_arn   = var.certificate_arn
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  default_action {
+    type = "fixed-response"
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "これはHTTPSです"
+      status_code  = "200"
+    }
+  }
+}
+
+resource "aws_lb_listener" "redirect_https" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = "8080"
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
 resource "aws_lb_target_group" "alb_tg" {
   name                 = "FTRA-ALB-TG"
   target_type          = "ip"
@@ -62,7 +96,7 @@ resource "aws_lb_target_group" "alb_tg" {
 }
 
 resource "aws_lb_listener_rule" "alb_listener_rule" {
-  listener_arn = aws_lb_listener.http.arn
+  listener_arn = aws_lb_listener.https.arn
   priority     = 100
   action {
     type             = "forward"
@@ -76,3 +110,10 @@ resource "aws_lb_listener_rule" "alb_listener_rule" {
 
 }
 
+output "alb_dns_name" {
+  value = aws_lb.alb.dns_name
+}
+
+output "alb_zone_id" {
+  value = aws_lb.alb.zone_id
+}
