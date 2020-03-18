@@ -9,6 +9,14 @@ resource "aws_vpc" "vpc" {
   }
 }
 
+resource "aws_vpc_endpoint" "dynamodb" {
+  vpc_id       = aws_vpc.vpc.id
+  service_name = "com.amazonaws.ap-northeast-1.dynamodb"
+
+  tags = {
+    Name = "FTRA_${var.env}_VPC_EP"
+  }
+}
 
 output "vpc_id" {
   value = aws_vpc.vpc.id
