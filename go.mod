@@ -6,6 +6,7 @@ require (
 	github.com/99designs/gqlgen v0.11.1
 	github.com/BurntSushi/toml v0.3.1
 	github.com/aws/aws-sdk-go v1.29.9
+	github.com/gin-contrib/cors v1.3.1 // indirect
 	github.com/gin-gonic/gin v1.5.0
 	github.com/guregu/dynamo v1.6.0
 	github.com/pkg/errors v0.9.1
