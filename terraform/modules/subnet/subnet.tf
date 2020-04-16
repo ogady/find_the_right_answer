@@ -161,3 +161,11 @@ output "pub_sub_0_id" {
 output "pub_sub_1_id" {
   value = aws_subnet.pub_subnet_1.id
 }
+
+output "pri_sub_0_id" {
+  value = aws_subnet.pri_subnet_0.id
+}
+
+output "pri_sub_1_id" {
+  value = aws_subnet.pri_subnet_1.id
+}

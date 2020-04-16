@@ -10,6 +10,8 @@ import (
 	"github.com/ogady/find_the_right_answer/config"
 	"github.com/ogady/find_the_right_answer/interface/graph"
 	"github.com/ogady/find_the_right_answer/interface/graph/generated"
+	gintrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/gin-gonic/gin"
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 // Defining the Graphql handler
@@ -30,6 +32,10 @@ func playgroundHandler() gin.HandlerFunc {
 }
 
 func main() {
+
+	tracer.Start()
+	defer tracer.Stop()
+
 	err := config.InitConf()
 
 	if err != nil {
@@ -37,7 +43,7 @@ func main() {
 	}
 
 	r := gin.Default()
-	r.Use(cors.New(cors.Config{
+	r.Use(gintrace.Middleware("FTRA-API"), cors.New(cors.Config{
 		// 許可したいHTTPメソッドの一覧
 		AllowMethods: []string{
 			"POST",

@@ -1,44 +1,51 @@
 variable "env" {}
-variable "aws_lb_target_group_arn" {}
-variable "iam_role_arn" {}
+variable "alb_terget_group_arn" {}
+variable "pri_sub_0_id" {}
+variable "pri_sub_1_id" {}
+variable "http_security_group_id" {}
+variable "container_definitions" {}
+variable "self" {}
 
 resource "aws_ecs_cluster" "cluster" {
-  name = "FTRA-cluster"
+  name = "FTRA-API-cluster"
   tags = {
-    Name = "FTRA-cluster"
+    Name = "FTRA-API-cluster"
   }
 }
 
 resource "aws_ecs_task_definition" "ecs_task_definition" {
-  family                   = "service"
-  cpu                      = "256"
-  memory                   = "512"
+  family                   = "FTRA-API-datadog-task"
+  memory                   = "1024"
   network_mode             = "awsvpc"
+  cpu                      = "512"
   requires_compatibilities = ["FARGATE"]
-  container_definitions    = "${file("task-definitions/service.json")}"
-
-  placement_constraints {
-    type       = "memberOf"
-    expression = "attribute:ecs.availability-zone in [ap-northeast-1a, ap-northeast-1c]"
-  }
+  container_definitions    = var.container_definitions
+  task_role_arn            = "arn:aws:iam::${var.self}:role/ecsTaskExecutionRole"
+  execution_role_arn       = "arn:aws:iam::${var.self}:role/ecsTaskExecutionRole"
 }
 
-resource "aws_ecs_service" "app_with_mackerel" {
-  name            = "FTRA-service"
-  cluster         = "${aws_ecs_cluster.cluster.id}"
-  task_definition = "${aws_ecs_task_definition.ecs_task_definition.arn}"
-  desired_count   = 3
-  iam_role        = "${var.iam_role_arn}"
-  depends_on      = ["aws_iam_role_policy.foo"]
-
+resource "aws_ecs_service" "ecs_service" {
+  name            = "FTRA-API-datadog-service"
+  cluster         = aws_ecs_cluster.cluster.id
+  task_definition = aws_ecs_task_definition.ecs_task_definition.arn
+  desired_count   = 2
+  launch_type     = "FARGATE"
   load_balancer {
-    target_group_arn = "${var.aws_lb_target_group_arn}"
-    container_name   = "app_with_mackerel"
+    target_group_arn = var.alb_terget_group_arn
+    container_name   = "FTRA-container"
     container_port   = 80
   }
 
-  placement_constraints {
-    type       = "memberOf"
-    expression = "attribute:ecs.availability-zone in [us-west-2a, us-west-2b]"
+  network_configuration {
+    assign_public_ip = true
+
+    subnets = [
+      var.pri_sub_0_id,
+      var.pri_sub_1_id
+    ]
+
+    security_groups = [
+      var.http_security_group_id
+    ]
   }
 }

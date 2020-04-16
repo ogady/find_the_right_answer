@@ -18,15 +18,6 @@ resource "aws_dynamodb_table" "dynamodb_topic" {
     type = "S"
   }
 
-  attribute {
-    name = "NumOfLikes"
-    type = "N"
-  }
-
-  ttl {
-    attribute_name = "TimeToExist"
-    enabled        = false
-  }
 
   tags = {
     Name = "FTRA_${var.env}_Topic"
@@ -45,10 +36,6 @@ resource "aws_dynamodb_table" "dynamodb_topicPiece" {
     type = "S"
   }
 
-  ttl {
-    attribute_name = "TimeToExist"
-    enabled        = false
-  }
 
   tags = {
     Name = "FTRA_${var.env}_TopicPiece"
