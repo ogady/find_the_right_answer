@@ -8,11 +8,14 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/guregu/dynamo"
 	"github.com/ogady/find_the_right_answer/config"
+	awstrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/aws/aws-sdk-go/aws"
 )
 
 func NewDynamoDBConn() *dynamo.DB {
 
 	var db *dynamo.DB
+
+	var sess *session.Session
 
 	env := os.Getenv("ENV")
 	if env == "" {
@@ -20,11 +23,15 @@ func NewDynamoDBConn() *dynamo.DB {
 	}
 
 	if env == "prod" {
-		db = dynamo.New(session.New(), &aws.Config{
+		sess = session.Must(session.NewSession(&aws.Config{
 			Region: aws.String(config.DynamoDB.Region),
-		})
+		}))
+		sess = awstrace.WrapSession(sess)
+		db = dynamo.New(sess)
+
 	} else {
-		db = dynamo.New(session.New(), &aws.Config{
+
+		sess = session.Must(session.NewSession(&aws.Config{
 			Region:   aws.String(config.DynamoDB.Region),
 			Endpoint: aws.String(config.DynamoDB.Endpoint),
 			Credentials: credentials.NewStaticCredentials(
@@ -32,7 +39,10 @@ func NewDynamoDBConn() *dynamo.DB {
 				config.DynamoDB.SecretKey,
 				config.DynamoDB.SessionToken,
 			),
-		})
+		}))
+		sess = awstrace.WrapSession(sess)
+		db = dynamo.New(sess)
+
 	}
 
 	return db
