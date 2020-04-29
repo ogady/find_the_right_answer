@@ -27,7 +27,6 @@ output "alb_terget_group_arn" {
   value = module.alb.alb_terget_group_arn
 }
 
-
-output "local_alb_terget_group_arn" {
-  value = module.alb.local_alb_terget_group_arn
+output "http_alb_terget_group_arn" {
+  value = module.alb.http_alb_terget_group_arn
 }

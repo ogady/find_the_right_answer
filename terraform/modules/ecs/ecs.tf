@@ -2,7 +2,7 @@ variable "env" {}
 variable "alb_terget_group_arn" {}
 variable "pri_sub_0_id" {}
 variable "pri_sub_1_id" {}
-variable "http_security_group_id" {}
+variable "security_group_id" {}
 variable "container_definitions" {}
 variable "self" {}
 
@@ -45,7 +45,7 @@ resource "aws_ecs_service" "ecs_service" {
     ]
 
     security_groups = [
-      var.http_security_group_id
+      var.security_group_id
     ]
   }
 }
