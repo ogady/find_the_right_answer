@@ -1,5 +1,6 @@
 output "vpc" {
-  value = module.vpc.vpc_id ## ここではmoduleのoutputを指定する。
+  ## ここではmoduleのoutputを指定する。
+  value = module.vpc.vpc_id
 }
 
 output "pri_sub_0_id" {
@@ -24,4 +25,9 @@ output "http_security_group_id" {
 
 output "alb_terget_group_arn" {
   value = module.alb.alb_terget_group_arn
+}
+
+
+output "local_alb_terget_group_arn" {
+  value = module.alb.local_alb_terget_group_arn
 }

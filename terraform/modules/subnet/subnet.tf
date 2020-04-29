@@ -153,6 +153,13 @@ resource "aws_route_table_association" "pub_sub_1_route" {
 
 }
 
+output "pub_sub_0_cidr" {
+  value = aws_subnet.pub_subnet_0.cidr_block
+}
+
+output "pub_sub_1_cidr" {
+  value = aws_subnet.pub_subnet_1.cidr_block
+}
 
 output "pub_sub_0_id" {
   value = aws_subnet.pub_subnet_0.id

@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"time"
 
 	"github.com/99designs/gqlgen/handler"
@@ -22,18 +23,19 @@ func graphqlHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
 	}
-
 }
 
 // Defining the Playground handler
 func playgroundHandler() gin.HandlerFunc {
 	h := handler.Playground("GraphQL", "/")
-	return func(c *gin.Context) { h.ServeHTTP(c.Writer, c.Request) }
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
 }
 
 func main() {
 
-	tracer.Start()
+	tracer.Start(tracer.WithEnv(os.Getenv("ENV")))
 	defer tracer.Stop()
 
 	err := config.InitConf()

@@ -44,9 +44,9 @@
     },
     "portMappings": [
       {
-        "hostPort": 8126,
+        "hostPort": 8125,
         "protocol": "tcp",
-        "containerPort": 8126
+        "containerPort": 8125
       }
     ],
     "environment": [
