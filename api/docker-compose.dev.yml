@@ -1,0 +1,32 @@
+version: "3.3"
+services:
+  api:
+    build: ./
+    ports:
+      - 80:80
+    volumes:
+      - ./api:/go/src/github.com/ogady/find_the_right_answer/api
+    environment:
+      - ENV=dev
+
+  dynamodblocal:
+    image: amazon/dynamodb-local
+    volumes:
+      - volume-dynamodb_data:/home/dynamodblocal/data
+    ports:
+      - 8000:8002
+
+  dynamodbadmin:
+    image: instructure/dynamo-local-admin
+    ports:
+      - 8001:8000
+    environment:
+      DYNAMO_ENDPOINT: http://dynamodblocal:8000/
+      AWS_REGION: ap-northeast-1
+      AWS_ACCESS_KEY_ID: dummy
+    depends_on:
+      - dynamodblocal
+
+volumes:
+  volume-dynamodb_data:
+    driver: "local"
