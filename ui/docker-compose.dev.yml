@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  app:
+    container_name: find_the_right_answer_ui
+    image: reactapp:latest
+    build:
+      context: .
+      args:
+        - NODE_TAG=12.8
+        - NGINX_TAG=alpine
+    environment:
+      - NODE_ENV=production
+    ports:
+      - 80:80
+    restart: always
