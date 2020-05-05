@@ -45,7 +45,7 @@ module "http_redirect_sg" {
   source      = "../../../modules/security_group"
   name        = "http_redirect_sg"
   vpc_id      = module.vpc.vpc_id
-  port        = 8080
+  port        = 80
   cidr_blocks = ["0.0.0.0/0"]
 }
 
