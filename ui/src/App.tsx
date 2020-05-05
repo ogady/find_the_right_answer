@@ -8,7 +8,7 @@ import { ApolloProvider } from "@apollo/react-hooks";
 
 const client = new ApolloClient({
   // uri: process.env.REACT_APP_API_URL,
-  uri: "https://ogady.net/",
+  uri: "https://ogady.net/api",
 });
 
 function App() {
