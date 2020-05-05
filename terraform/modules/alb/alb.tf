@@ -4,7 +4,7 @@ variable "pub_sub_0_id" {}
 variable "pub_sub_1_id" {}
 variable "pri_sub_0_id" {}
 variable "pri_sub_1_id" {}
-variable "http_sg_id" {}
+variable "pri_app_sg" {}
 variable "https_sg_id" {}
 variable "http_redirect_sg_id" {}
 variable "certificate_arn" {}
@@ -27,37 +27,6 @@ resource "aws_lb" "alb" {
   }
 }
 
-resource "aws_lb" "http_alb" {
-  name               = "FTRA-${var.env}-HTTP-ALB"
-  load_balancer_type = "application"
-  internal           = false
-  idle_timeout       = 60
-  subnets = [
-    var.pub_sub_0_id,
-    var.pub_sub_1_id,
-  ]
-  security_groups = [
-    var.http_sg_id,
-  ]
-  tags = {
-    Name = "FTRA-${var.env}-HTTP-ALB"
-  }
-}
-
-resource "aws_lb_listener" "http" {
-  load_balancer_arn = aws_lb.http_alb.arn
-  port              = "80"
-  protocol          = "HTTP"
-  default_action {
-    type = "fixed-response"
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "これはHTTPです"
-      status_code  = "200"
-    }
-  }
-}
-
 resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.alb.arn
   port              = "443"
@@ -65,12 +34,8 @@ resource "aws_lb_listener" "https" {
   certificate_arn   = var.certificate_arn
   ssl_policy        = "ELBSecurityPolicy-2016-08"
   default_action {
-    type = "fixed-response"
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "これはHTTPSです"
-      status_code  = "200"
-    }
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.alb_tg.arn
   }
 }
 
@@ -112,11 +77,11 @@ resource "aws_lb_target_group" "alb_tg" {
   depends_on = [aws_lb.alb]
 }
 
-resource "aws_lb_target_group" "http_alb_tg" {
-  name                 = "FTRA-HTTP-ALB-TG"
+resource "aws_lb_target_group" "api_alb_tg" {
+  name                 = "FTRA-API-ALB-TG"
   target_type          = "ip"
   vpc_id               = var.vpc_id
-  port                 = 80
+  port                 = 8080
   protocol             = "HTTP"
   deregistration_delay = 300
   health_check {
@@ -130,39 +95,51 @@ resource "aws_lb_target_group" "http_alb_tg" {
     protocol            = "HTTP"
   }
   tags = {
-    Name = "FTRA_${var.env}_HTTP_ALB_TG"
+    Name = "FTRA_${var.env}_API_ALB_TG"
   }
-  depends_on = [aws_lb.http_alb]
+  depends_on = [aws_lb.alb]
 }
 
 resource "aws_lb_listener_rule" "alb_listener_rule" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 100
+  priority     = 1
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.alb_tg.arn
   }
   condition {
     path_pattern {
-      values = ["/*"]
+      values = ["/"]
     }
   }
-
 }
 
-resource "aws_lb_listener_rule" "http_alb_listener_rule" {
-  listener_arn = aws_lb_listener.http.arn
-  priority     = 100
+resource "aws_lb_listener_rule" "api_alb_listener_rule" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 2
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.http_alb_tg.arn
+    target_group_arn = aws_lb_target_group.api_alb_tg.arn
   }
   condition {
     path_pattern {
-      values = ["/*"]
+      values = ["/api"]
     }
   }
+}
 
+resource "aws_lb_listener_rule" "playground_alb_listener_rule" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 3
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.api_alb_tg.arn
+  }
+  condition {
+    path_pattern {
+      values = ["/playground"]
+    }
+  }
 }
 
 output "alb_dns_name" {
@@ -177,7 +154,6 @@ output "alb_terget_group_arn" {
   value = aws_lb_target_group.alb_tg.arn
 }
 
-output "http_alb_terget_group_arn" {
-  value = aws_lb_target_group.http_alb_tg.arn
+output "api_alb_terget_group_arn" {
+  value = aws_lb_target_group.api_alb_tg.arn
 }
-

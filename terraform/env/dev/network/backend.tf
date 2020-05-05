@@ -8,7 +8,4 @@ terraform {
     key    = "dev/network/terraform.tfstate"
     region = "ap-northeast-1"
   }
-  # backend "local" {
-  #   path = "terraform.tfstate"
-  # }
 }

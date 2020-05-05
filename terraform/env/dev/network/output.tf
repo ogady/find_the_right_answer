@@ -19,14 +19,14 @@ output "redirect_security_group_id" {
   value = module.http_redirect_sg.security_group_id
 }
 
-output "http_security_group_id" {
-  value = module.http_sg.security_group_id
+output "pri_app_security_group_id" {
+  value = module.pri_app_sg.security_group_id
 }
 
 output "alb_terget_group_arn" {
   value = module.alb.alb_terget_group_arn
 }
 
-output "http_alb_terget_group_arn" {
-  value = module.alb.http_alb_terget_group_arn
+output "api_alb_terget_group_arn" {
+  value = module.alb.api_alb_terget_group_arn
 }
