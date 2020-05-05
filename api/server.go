@@ -71,7 +71,7 @@ func main() {
 		MaxAge: 24 * time.Hour,
 	}))
 
-	r.POST("/", graphqlHandler())
+	r.POST("/api", graphqlHandler())
 	r.GET("/playground", playgroundHandler())
-	r.Run(":80")
+	r.Run(":8080")
 }

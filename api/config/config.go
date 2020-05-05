@@ -27,7 +27,7 @@ func InitConf() error {
 
 	env := os.Getenv("ENV")
 	if env == "" {
-		panic("failed to get application mode, check whether APP_MODE is set.")
+		panic("failed to get application mode, check whether ENV is set.")
 	}
 
 	// Get configuration
