@@ -23,7 +23,7 @@ func Test_likeTopicUsecase_LikeTopic(t *testing.T) {
 			r:    new(likeTopicUsecase),
 			args: args{topic: model.Topic{
 				StartChar:  model.StartChar{StartChar: "あ"},
-				TopicPiece: model.TopicPiece{TopicPiece: "人生を変える本は？"},
+				TopicPiece: model.TopicPiece{TopicPiece: "人生を変える本"},
 				NumOfLikes: 2,
 			}},
 			wantErr: false,

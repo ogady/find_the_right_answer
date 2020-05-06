@@ -42,7 +42,7 @@ const CreateTopic: React.FC = () => {
   >(CREATE_TOPIC);
 
   if (called && loading) return <p>Loading...</p>;
-  if (error) return <p>Error :</p>;
+  if (error) return <p>Error : {error?.message}</p>;
 
   if (!called) {
     return (
