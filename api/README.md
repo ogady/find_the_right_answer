@@ -20,7 +20,7 @@ query{
 
 ```
 mutation addTopicPiece {
-  addTopicPiece(input: {topicPiece:"尖っているものは？"}) {
+  addTopicPiece(input: {topicPiece:"尖っているもの"}) {
     topicPiece
   }
 }
