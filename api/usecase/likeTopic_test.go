@@ -32,7 +32,7 @@ func Test_likeTopicUsecase_LikeTopic(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &likeTopicUsecase{}
-			if err := r.LikeTopic(tt.args.topic); (err != nil) != tt.wantErr {
+			if _, err := r.LikeTopic(tt.args.topic); (err != nil) != tt.wantErr {
 				t.Errorf("likeTopicUsecase.LikeTopic() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

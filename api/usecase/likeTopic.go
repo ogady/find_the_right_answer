@@ -11,7 +11,9 @@ func NewLikeTopicUsecase() createTopicUsecase {
 	return createTopicUsecase{}
 }
 
-func (r *likeTopicUsecase) LikeTopic(topic model.Topic) error {
+func (r *likeTopicUsecase) LikeTopic(topic model.Topic) (model.Topic, error) {
 	var err error
-	return err
+	var incrementedTopic model.Topic
+
+	return incrementedTopic, err
 }
