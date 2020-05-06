@@ -80,8 +80,8 @@ const CreateTopic: React.FC = () => {
         <br />
         <Grid container direction="column" justify="center" alignItems="center">
           <div>
-            {data && data.topic.startChar.startChar} で始まる、
-            {data && data.topic.topicPiece.topicPiece}
+            <b>{data && data.topic.startChar.startChar}</b> で始まる、
+            <b>{data && data.topic.topicPiece.topicPiece}</b>は？
           </div>
         </Grid>
       </div>
