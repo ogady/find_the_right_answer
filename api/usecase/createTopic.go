@@ -51,10 +51,17 @@ func (r *createTopicUsecase) CreateTopic() (model.Topic, error) {
 		switch {
 		// 重複エラーは問題なくレスポンスする
 		case strings.Contains(err.Error(), "ConditionalCheckFailedException"):
+			// TODO breakする処理に変える
 			return topic, nil
+
 		default:
 			return topic, err
 		}
 	}
+
+	// TODO TopicのNumOfLikesのみを取ってくる処理を追加
+	// 取ってきたTopic := TopicのNumOfLikesのみを取ってくる()
+	// topic.NumOfLikes = 取ってきたTopic.NumOfLikes
+
 	return topic, nil
 }
