@@ -27,10 +27,10 @@ func (r *TopicRepoImplMock) Save(topic *model.Topic) error {
 }
 
 func (r *TopicRepoImplMock) FindAll() ([]model.Topic, error) {
-	var ts []model.Topic
+	var topics []model.Topic
 	var err error
 
-	return ts, err
+	return topics, err
 }
 
 func (r *TopicRepoImplMock) Find(topicID string) (model.Topic, error) {
@@ -38,4 +38,19 @@ func (r *TopicRepoImplMock) Find(topicID string) (model.Topic, error) {
 	var err error
 
 	return topic, err
+}
+
+func (r *TopicRepoImplMock) FetchOnlyNumOfLikeByTopic(topic model.Topic) (int, error) {
+	//var topic model.Topic
+	var numOfLikes int
+	var err error
+
+	return numOfLikes, err
+}
+
+func (r *TopicRepoImplMock) UpdateTopicNumOfLike(topic model.Topic) (model.Topic, error) {
+	var resultTopic model.Topic
+	var err error
+
+	return resultTopic, err
 }
