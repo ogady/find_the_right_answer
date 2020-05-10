@@ -40,10 +40,12 @@ func (r *TopicRepoImplMock) Find(topicID string) (model.Topic, error) {
 	return topic, err
 }
 
-func (r *TopicRepoImplMock) FetchOnlyNumOfLikeByTopic(topic model.Topic) (int, error) {
-	//var topic model.Topic
-	var numOfLikes int
+func (r *TopicRepoImplMock) FetchOnlyNumOfLikeByTopic(topic model.Topic) (model.NumOfLikes, error) {
+
+	var numOfLikes model.NumOfLikes
 	var err error
+
+	numOfLikes.NumOfLikes = 1
 
 	return numOfLikes, err
 }

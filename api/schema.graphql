@@ -5,7 +5,7 @@
 type Topic {
   startChar: StartChar!
   topicPiece: TopicPiece!
-  numOfLikes: Int
+  numOfLikes: NumOfLikes!
 }
 
 # TopicPieceのデータ保持
@@ -16,6 +16,11 @@ type TopicPiece {
 # StartCharのデータ保持
 type StartChar {
   startChar: String!
+}
+
+# NumOfLikesのデータ保持
+type NumOfLikes {
+  numOfLikes: Int!
 }
 
 type Query {

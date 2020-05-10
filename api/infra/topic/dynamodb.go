@@ -41,7 +41,7 @@ func (r *TopicRepoImpl) Save(topic *model.Topic) error {
 	dt := dynamoTopic{
 		StartChar:  topic.StartChar.StartChar,
 		TopicPiece: topic.TopicPiece.TopicPiece,
-		NumOfLikes: topic.NumOfLikes,
+		NumOfLikes: topic.NumOfLikes.NumOfLikes,
 	}
 
 	err = r.table.Put(&dt).If("attribute_not_exists(StartChar)").Run()
@@ -73,7 +73,7 @@ func (r *TopicRepoImpl) FindAll() ([]model.Topic, error) {
 		t := model.Topic{
 			StartChar:  model.StartChar{StartChar: v.StartChar},
 			TopicPiece: model.TopicPiece{TopicPiece: v.TopicPiece},
-			NumOfLikes: v.NumOfLikes,
+			NumOfLikes: model.NumOfLikes{NumOfLikes: v.NumOfLikes},
 		}
 		ts = append(ts, t)
 	}
@@ -88,16 +88,15 @@ func (r *TopicRepoImpl) Find(topicID string) (model.Topic, error) {
 	return topic, err
 }
 
-func (r *TopicRepoImpl) FetchOnlyNumOfLikeByTopic(topic model.Topic) (int, error) {
-	var numOfLikes int
+func (r *TopicRepoImpl) FetchOnlyNumOfLikeByTopic(topic model.Topic) (model.NumOfLikes, error) {
+	var numOfLikes model.NumOfLikes
 	var err error
 
-	err = r.table.Get("StartChar", topic.StartChar).Range("TopicPiece", dynamo.Equal, topic.TopicPiece).One(&topic.NumOfLikes)
+	err = r.table.Get("StartChar", topic.StartChar.StartChar).Range("TopicPiece", dynamo.Equal, topic.TopicPiece.TopicPiece).One(&numOfLikes.NumOfLikes)
+
 	if err != nil {
 		return numOfLikes, err
 	}
-
-	numOfLikes = topic.NumOfLikes
 
 	return numOfLikes, nil
 }
@@ -106,7 +105,7 @@ func (r *TopicRepoImpl) UpdateTopicNumOfLike(topic model.Topic) (model.Topic, er
 	var resultTopic model.Topic
 	var err error
 
-	err = r.table.Update("StartChar", topic.StartChar).Range("TopicPiece", topic.TopicPiece).Set("NumOfLikes", &topic.NumOfLikes).Value(&resultTopic)
+	err = r.table.Update("StartChar", topic.StartChar.StartChar).Range("TopicPiece", topic.TopicPiece.TopicPiece).Set("NumOfLikes", &topic.NumOfLikes.NumOfLikes).Value(&resultTopic)
 	if err != nil {
 		return resultTopic, err
 	}

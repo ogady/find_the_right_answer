@@ -10,6 +10,6 @@ type TopicRepository interface {
 	FindAll() ([]model.Topic, error)
 	Find(string) (model.Topic, error)
 	// FetchOnlyNumOfLikeByTopic - TopicのNumofLikeのみ取得する。
-	FetchOnlyNumOfLikeByTopic(model.Topic) (int, error)
+	FetchOnlyNumOfLikeByTopic(model.Topic) (model.NumOfLikes, error)
 	UpdateTopicNumOfLike(model.Topic) (model.Topic, error)
 }
