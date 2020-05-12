@@ -92,7 +92,7 @@ func (r *TopicRepoImpl) FetchOnlyNumOfLikeByTopic(topic model.Topic) (model.NumO
 	var numOfLikes model.NumOfLikes
 	var err error
 
-	err = r.table.Get("StartChar", topic.StartChar.StartChar).Range("TopicPiece", dynamo.Equal, topic.TopicPiece.TopicPiece).One(&numOfLikes.NumOfLikes)
+	err = r.table.Get("StartChar", topic.StartChar.StartChar).Range("TopicPiece", dynamo.Equal, topic.TopicPiece.TopicPiece).One(&numOfLikes)
 
 	if err != nil {
 		return numOfLikes, err
