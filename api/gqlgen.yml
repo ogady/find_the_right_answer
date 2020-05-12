@@ -43,5 +43,7 @@ models:
     model: github.com/ogady/find_the_right_answer/api/domain/model.TopicPiece
   StartChar:
     model: github.com/ogady/find_the_right_answer/api/domain/model.StartChar
+  NumOfLikes:
+    model: github.com/ogady/find_the_right_answer/api/domain/model.NumOfLikes
   NewTopicPiece:
     model: github.com/ogady/find_the_right_answer/api/domain/model.TopicPiece

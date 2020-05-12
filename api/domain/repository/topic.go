@@ -5,7 +5,11 @@ import (
 )
 
 type TopicRepository interface {
+	// Save - Topicを保存する。
 	Save(*model.Topic) error
 	FindAll() ([]model.Topic, error)
 	Find(string) (model.Topic, error)
+	// FetchOnlyNumOfLikeByTopic - TopicのNumofLikeのみ取得する。
+	FetchOnlyNumOfLikeByTopic(model.Topic) (model.NumOfLikes, error)
+	UpdateTopicNumOfLike(model.Topic) (model.Topic, error)
 }

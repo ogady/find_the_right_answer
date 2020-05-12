@@ -1,8 +1,6 @@
 package usecase
 
 import (
-	"strings"
-
 	"github.com/ogady/find_the_right_answer/api/domain/model"
 	"github.com/ogady/find_the_right_answer/api/domain/repository"
 	startCharInfra "github.com/ogady/find_the_right_answer/api/infra/startChar"
@@ -46,22 +44,16 @@ func (r *createTopicUsecase) CreateTopic() (model.Topic, error) {
 	}
 
 	err = r.topicRepo.Save(&topic)
-
 	if err != nil {
-		switch {
-		// 重複エラーは問題なくレスポンスする
-		case strings.Contains(err.Error(), "ConditionalCheckFailedException"):
-			// TODO breakする処理に変える
-			return topic, nil
-
-		default:
-			return topic, err
-		}
+		return topic, err
 	}
 
-	// TODO TopicのNumOfLikesのみを取ってくる処理を追加
-	// 取ってきたTopic := TopicのNumOfLikesのみを取ってくる()
-	// topic.NumOfLikes = 取ってきたTopic.NumOfLikes
+	numOfLikes, err := r.topicRepo.FetchOnlyNumOfLikeByTopic(topic)
+	if err != nil {
+		return topic, err
+	}
+
+	topic.NumOfLikes = numOfLikes
 
 	return topic, nil
 }

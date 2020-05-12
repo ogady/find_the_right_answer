@@ -3,5 +3,9 @@ package model
 type Topic struct {
 	StartChar  StartChar  // 「startChar」で始まる
 	TopicPiece TopicPiece // 「topicPiece」は？
-	NumOfLikes int        // いいねの数
+	NumOfLikes NumOfLikes // いいねの数
+}
+
+type NumOfLikes struct {
+	NumOfLikes int
 }

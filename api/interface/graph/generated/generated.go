@@ -47,6 +47,10 @@ type ComplexityRoot struct {
 		AddTopicPiece func(childComplexity int, input model.TopicPiece) int
 	}
 
+	NumOfLikes struct {
+		NumOfLikes func(childComplexity int) int
+	}
+
 	Query struct {
 		Topic func(childComplexity int) int
 	}
@@ -99,6 +103,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.AddTopicPiece(childComplexity, args["input"].(model.TopicPiece)), true
+
+	case "NumOfLikes.numOfLikes":
+		if e.complexity.NumOfLikes.NumOfLikes == nil {
+			break
+		}
+
+		return e.complexity.NumOfLikes.NumOfLikes(childComplexity), true
 
 	case "Query.topic":
 		if e.complexity.Query.Topic == nil {
@@ -213,7 +224,7 @@ var sources = []*ast.Source{
 type Topic {
   startChar: StartChar!
   topicPiece: TopicPiece!
-  numOfLikes: Int
+  numOfLikes: NumOfLikes!
 }
 
 # TopicPieceのデータ保持
@@ -224,6 +235,11 @@ type TopicPiece {
 # StartCharのデータ保持
 type StartChar {
   startChar: String!
+}
+
+# NumOfLikesのデータ保持
+type NumOfLikes {
+  numOfLikes: Int!
 }
 
 type Query {
@@ -250,7 +266,7 @@ func (ec *executionContext) field_Mutation_addTopicPiece_args(ctx context.Contex
 	args := map[string]interface{}{}
 	var arg0 model.TopicPiece
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNNewTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋdomainᚋmodelᚐTopicPiece(ctx, tmp)
+		arg0, err = ec.unmarshalNNewTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐTopicPiece(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -344,7 +360,41 @@ func (ec *executionContext) _Mutation_addTopicPiece(ctx context.Context, field g
 	}
 	res := resTmp.(*model.TopicPiece)
 	fc.Result = res
-	return ec.marshalOTopicPiece2ᚖgithubᚗcomᚋogadyᚋfind_the_right_answerᚋdomainᚋmodelᚐTopicPiece(ctx, field.Selections, res)
+	return ec.marshalOTopicPiece2ᚖgithubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐTopicPiece(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _NumOfLikes_numOfLikes(ctx context.Context, field graphql.CollectedField, obj *model.NumOfLikes) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "NumOfLikes",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NumOfLikes, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_topic(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -378,7 +428,7 @@ func (ec *executionContext) _Query_topic(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*model.Topic)
 	fc.Result = res
-	return ec.marshalNTopic2ᚖgithubᚗcomᚋogadyᚋfind_the_right_answerᚋdomainᚋmodelᚐTopic(ctx, field.Selections, res)
+	return ec.marshalNTopic2ᚖgithubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐTopic(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -515,7 +565,7 @@ func (ec *executionContext) _Topic_startChar(ctx context.Context, field graphql.
 	}
 	res := resTmp.(model.StartChar)
 	fc.Result = res
-	return ec.marshalNStartChar2githubᚗcomᚋogadyᚋfind_the_right_answerᚋdomainᚋmodelᚐStartChar(ctx, field.Selections, res)
+	return ec.marshalNStartChar2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐStartChar(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Topic_topicPiece(ctx context.Context, field graphql.CollectedField, obj *model.Topic) (ret graphql.Marshaler) {
@@ -549,7 +599,7 @@ func (ec *executionContext) _Topic_topicPiece(ctx context.Context, field graphql
 	}
 	res := resTmp.(model.TopicPiece)
 	fc.Result = res
-	return ec.marshalNTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋdomainᚋmodelᚐTopicPiece(ctx, field.Selections, res)
+	return ec.marshalNTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐTopicPiece(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Topic_numOfLikes(ctx context.Context, field graphql.CollectedField, obj *model.Topic) (ret graphql.Marshaler) {
@@ -576,11 +626,14 @@ func (ec *executionContext) _Topic_numOfLikes(ctx context.Context, field graphql
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(int)
+	res := resTmp.(model.NumOfLikes)
 	fc.Result = res
-	return ec.marshalOInt2int(ctx, field.Selections, res)
+	return ec.marshalNNumOfLikes2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐNumOfLikes(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _TopicPiece_topicPiece(ctx context.Context, field graphql.CollectedField, obj *model.TopicPiece) (ret graphql.Marshaler) {
@@ -1726,6 +1779,33 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 	return out
 }
 
+var numOfLikesImplementors = []string{"NumOfLikes"}
+
+func (ec *executionContext) _NumOfLikes(ctx context.Context, sel ast.SelectionSet, obj *model.NumOfLikes) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, numOfLikesImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("NumOfLikes")
+		case "numOfLikes":
+			out.Values[i] = ec._NumOfLikes_numOfLikes(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var queryImplementors = []string{"Query"}
 
 func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -1820,6 +1900,9 @@ func (ec *executionContext) _Topic(ctx context.Context, sel ast.SelectionSet, ob
 			}
 		case "numOfLikes":
 			out.Values[i] = ec._Topic_numOfLikes(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -2117,11 +2200,29 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalNNewTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋdomainᚋmodelᚐTopicPiece(ctx context.Context, v interface{}) (model.TopicPiece, error) {
+func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
+	return graphql.UnmarshalInt(v)
+}
+
+func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	res := graphql.MarshalInt(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNNewTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐTopicPiece(ctx context.Context, v interface{}) (model.TopicPiece, error) {
 	return ec.unmarshalInputNewTopicPiece(ctx, v)
 }
 
-func (ec *executionContext) marshalNStartChar2githubᚗcomᚋogadyᚋfind_the_right_answerᚋdomainᚋmodelᚐStartChar(ctx context.Context, sel ast.SelectionSet, v model.StartChar) graphql.Marshaler {
+func (ec *executionContext) marshalNNumOfLikes2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐNumOfLikes(ctx context.Context, sel ast.SelectionSet, v model.NumOfLikes) graphql.Marshaler {
+	return ec._NumOfLikes(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNStartChar2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐStartChar(ctx context.Context, sel ast.SelectionSet, v model.StartChar) graphql.Marshaler {
 	return ec._StartChar(ctx, sel, &v)
 }
 
@@ -2139,11 +2240,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNTopic2githubᚗcomᚋogadyᚋfind_the_right_answerᚋdomainᚋmodelᚐTopic(ctx context.Context, sel ast.SelectionSet, v model.Topic) graphql.Marshaler {
+func (ec *executionContext) marshalNTopic2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐTopic(ctx context.Context, sel ast.SelectionSet, v model.Topic) graphql.Marshaler {
 	return ec._Topic(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTopic2ᚖgithubᚗcomᚋogadyᚋfind_the_right_answerᚋdomainᚋmodelᚐTopic(ctx context.Context, sel ast.SelectionSet, v *model.Topic) graphql.Marshaler {
+func (ec *executionContext) marshalNTopic2ᚖgithubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐTopic(ctx context.Context, sel ast.SelectionSet, v *model.Topic) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -2153,7 +2254,7 @@ func (ec *executionContext) marshalNTopic2ᚖgithubᚗcomᚋogadyᚋfind_the_rig
 	return ec._Topic(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋdomainᚋmodelᚐTopicPiece(ctx context.Context, sel ast.SelectionSet, v model.TopicPiece) graphql.Marshaler {
+func (ec *executionContext) marshalNTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐTopicPiece(ctx context.Context, sel ast.SelectionSet, v model.TopicPiece) graphql.Marshaler {
 	return ec._TopicPiece(ctx, sel, &v)
 }
 
@@ -2406,14 +2507,6 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return ec.marshalOBoolean2bool(ctx, sel, *v)
 }
 
-func (ec *executionContext) unmarshalOInt2int(ctx context.Context, v interface{}) (int, error) {
-	return graphql.UnmarshalInt(v)
-}
-
-func (ec *executionContext) marshalOInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
-	return graphql.MarshalInt(v)
-}
-
 func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {
 	return graphql.UnmarshalString(v)
 }
@@ -2437,11 +2530,11 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return ec.marshalOString2string(ctx, sel, *v)
 }
 
-func (ec *executionContext) marshalOTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋdomainᚋmodelᚐTopicPiece(ctx context.Context, sel ast.SelectionSet, v model.TopicPiece) graphql.Marshaler {
+func (ec *executionContext) marshalOTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐTopicPiece(ctx context.Context, sel ast.SelectionSet, v model.TopicPiece) graphql.Marshaler {
 	return ec._TopicPiece(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOTopicPiece2ᚖgithubᚗcomᚋogadyᚋfind_the_right_answerᚋdomainᚋmodelᚐTopicPiece(ctx context.Context, sel ast.SelectionSet, v *model.TopicPiece) graphql.Marshaler {
+func (ec *executionContext) marshalOTopicPiece2ᚖgithubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐTopicPiece(ctx context.Context, sel ast.SelectionSet, v *model.TopicPiece) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

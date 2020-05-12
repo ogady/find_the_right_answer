@@ -38,7 +38,8 @@ func Test_createTopicUsecase_CreateTopic(t *testing.T) {
 			},
 			want: model.Topic{
 				StartChar:  model.StartChar{StartChar: "あ"},
-				TopicPiece: model.TopicPiece{TopicPiece: "人生を変える本は？"},
+				TopicPiece: model.TopicPiece{TopicPiece: "人生を変える本"},
+				NumOfLikes: model.NumOfLikes{NumOfLikes: 1},
 			},
 			wantErr: false,
 		},

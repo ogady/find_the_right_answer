@@ -1,6 +1,8 @@
 package infra
 
 import (
+	"strings"
+
 	"github.com/guregu/dynamo"
 	"github.com/ogady/find_the_right_answer/api/domain/model"
 	"github.com/ogady/find_the_right_answer/api/domain/repository"
@@ -12,6 +14,7 @@ type TopicRepoImpl struct {
 	table    *dynamo.Table
 }
 
+// TODO Connection破棄
 func NewTopicRepoImpl() repository.TopicRepository {
 
 	db := awsInfra.NewDynamoDBConn()
@@ -31,18 +34,29 @@ type dynamoTopic struct {
 	NumOfLikes int
 }
 
+// Save - TopicをDynamoDBのTopicテーブルに保存する。
 func (r *TopicRepoImpl) Save(topic *model.Topic) error {
 
 	var err error
 	dt := dynamoTopic{
 		StartChar:  topic.StartChar.StartChar,
 		TopicPiece: topic.TopicPiece.TopicPiece,
-		NumOfLikes: topic.NumOfLikes,
+		NumOfLikes: topic.NumOfLikes.NumOfLikes,
 	}
 
 	err = r.table.Put(&dt).If("attribute_not_exists(StartChar)").Run()
+	if err != nil {
+		switch {
+		// 重複エラーは問題なくレスポンスする
+		case strings.Contains(err.Error(), "ConditionalCheckFailedException"):
+			return nil
 
-	return err
+		default:
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (r *TopicRepoImpl) FindAll() ([]model.Topic, error) {
@@ -59,10 +73,11 @@ func (r *TopicRepoImpl) FindAll() ([]model.Topic, error) {
 		t := model.Topic{
 			StartChar:  model.StartChar{StartChar: v.StartChar},
 			TopicPiece: model.TopicPiece{TopicPiece: v.TopicPiece},
-			NumOfLikes: v.NumOfLikes,
+			NumOfLikes: model.NumOfLikes{NumOfLikes: v.NumOfLikes},
 		}
 		ts = append(ts, t)
 	}
+
 	return ts, err
 }
 
@@ -71,4 +86,29 @@ func (r *TopicRepoImpl) Find(topicID string) (model.Topic, error) {
 	var err error
 
 	return topic, err
+}
+
+func (r *TopicRepoImpl) FetchOnlyNumOfLikeByTopic(topic model.Topic) (model.NumOfLikes, error) {
+	var numOfLikes model.NumOfLikes
+	var err error
+
+	err = r.table.Get("StartChar", topic.StartChar.StartChar).Range("TopicPiece", dynamo.Equal, topic.TopicPiece.TopicPiece).One(&numOfLikes)
+
+	if err != nil {
+		return numOfLikes, err
+	}
+
+	return numOfLikes, nil
+}
+
+func (r *TopicRepoImpl) UpdateTopicNumOfLike(topic model.Topic) (model.Topic, error) {
+	var resultTopic model.Topic
+	var err error
+
+	err = r.table.Update("StartChar", topic.StartChar.StartChar).Range("TopicPiece", topic.TopicPiece.TopicPiece).Set("NumOfLikes", &topic.NumOfLikes.NumOfLikes).Value(&resultTopic)
+	if err != nil {
+		return resultTopic, err
+	}
+
+	return resultTopic, nil
 }

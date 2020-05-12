@@ -37,6 +37,6 @@ func (r *addTopicPieceRepoImplMock) Find(str string) (model.TopicPiece, error) {
 func (r *addTopicPieceRepoImplMock) FindRandom() (model.TopicPiece, error) {
 	var topicPiece model.TopicPiece
 	var err error
-	topicPiece = model.TopicPiece{TopicPiece: "人生を変える本は？"}
+	topicPiece = model.TopicPiece{TopicPiece: "人生を変える本"}
 	return topicPiece, err
 }
