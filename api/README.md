@@ -11,7 +11,9 @@ query{
     topicPiece{
       topicPiece
     }
-    numOfLikes
+    numOfLikes{
+      numOfLikes
+    }
   }
 }
 ```
