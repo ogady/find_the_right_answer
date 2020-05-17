@@ -20,6 +20,7 @@ func NewLikeTopicUsecase() likeTopicUsecase {
 
 }
 
+// TODO 元のNumOfLikeを取得
 func (r *likeTopicUsecase) LikeTopic(topic model.Topic) (model.Topic, error) {
 	var err error
 

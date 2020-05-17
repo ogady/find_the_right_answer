@@ -38,11 +38,10 @@ func Test_likeTopicUsecase_LikeTopic(t *testing.T) {
 				NumOfLikes: model.NumOfLikes{NumOfLikes: 2},
 			}},
 			want: model.Topic{
-				topic: model.Topic{
-					StartChar:  model.StartChar{StartChar: "あ"},
-					TopicPiece: model.TopicPiece{TopicPiece: "人生を変える本"},
-					NumOfLikes: model.NumOfLikes{NumOfLikes: 3},
-				}},
+				StartChar:  model.StartChar{StartChar: "あ"},
+				TopicPiece: model.TopicPiece{TopicPiece: "人生を変える本"},
+				NumOfLikes: model.NumOfLikes{NumOfLikes: 3},
+			},
 			wantErr: false,
 		},
 	}

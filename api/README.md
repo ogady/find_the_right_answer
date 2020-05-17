@@ -25,3 +25,32 @@ mutation addTopicPiece {
   }
 }
 ```
+
+## お題にいいね
+
+```
+mutation likeTopic {
+  likeTopic(input: {
+    startChar:{
+      startChar:"あ"
+    }
+  	topicPiece:{
+      topicPiece:"尖っているもの"
+    }
+    numOfLikes:{
+      numOfLikes:0
+    }
+  }){
+    startChar{
+      startChar
+    }
+    topicPiece{
+      topicPiece
+    }
+    numOfLikes{
+      numOfLikes
+    }
+  }
+}
+  
+```
