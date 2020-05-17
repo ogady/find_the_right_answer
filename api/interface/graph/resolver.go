@@ -16,7 +16,7 @@ type Resolver struct{}
 
 func (r *mutationResolver) AddTopicPiece(ctx context.Context, input model.TopicPiece) (*model.TopicPiece, error) {
 	//操作のタイミングを追跡するために子スパンを作成します。
-	addTopicPieceSpan, _ := tracer.StartSpanFromContext(ctx, "addTopicPiece")
+	addTopicPieceSpan, _ := tracer.StartSpanFromContext(ctx, "AddTopicPiece")
 	u := usecase.NewAddTopicPieceUsecase()
 	err := u.AddTopicPiece(&input)
 	if err != nil {
@@ -24,6 +24,18 @@ func (r *mutationResolver) AddTopicPiece(ctx context.Context, input model.TopicP
 	}
 	addTopicPieceSpan.Finish()
 	return nil, nil
+}
+
+func (r *mutationResolver) LikeTopic(ctx context.Context, input model.Topic) (*model.Topic, error) {
+	//操作のタイミングを追跡するために子スパンを作成します。
+	likeTopicSpan, _ := tracer.StartSpanFromContext(ctx, "LikeTopic")
+	u := usecase.NewLikeTopicUsecase()
+	topic, err := u.LikeTopic(input)
+	if err != nil {
+		return &topic, err
+	}
+	likeTopicSpan.Finish()
+	return &topic, nil
 }
 
 func (r *queryResolver) Topic(ctx context.Context) (*model.Topic, error) {
