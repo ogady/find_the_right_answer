@@ -11,8 +11,9 @@ services:
 
   dynamodblocal:
     image: amazon/dynamodb-local
+    command: -jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal/data/ -optimizeDbBeforeStartup
     volumes:
-      - volume-dynamodb_data:/home/dynamodblocal/data
+      - ./dynamodblocalData/data:/home/dynamodblocal/data
     ports:
       - 8000:8002
 
@@ -28,5 +29,5 @@ services:
       - dynamodblocal
 
 volumes:
-  volume-dynamodb_data:
-    driver: "local"
+  dynamodblocalData:
+    driver: local
