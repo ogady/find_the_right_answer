@@ -22,6 +22,10 @@
       {
         "name": "ENV",
         "value": "prod"
+      },
+      {
+        "name": "GIN_MODE",
+        "value": "release"
       }
     ],
     "image": "${api_image-repository}",
