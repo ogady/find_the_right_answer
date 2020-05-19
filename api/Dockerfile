@@ -13,4 +13,4 @@ RUN apk --no-cache add ca-certificates && \
     mkdir -p config/env
 COPY --from=0 /go/src/config/env/*.toml ./config/env/
 COPY --from=0 /go/src/server .
-CMD ["./server"]
+ENTRYPOINT ["./server"]
