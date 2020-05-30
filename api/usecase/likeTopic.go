@@ -24,6 +24,7 @@ func NewLikeTopicUsecase() likeTopicUsecase {
 func (r *likeTopicUsecase) LikeTopic(topic model.Topic) (model.Topic, error) {
 	var err error
 
+	topic.NumOfLikes, err = r.topicRepo.FetchOnlyNumOfLikeByTopic(topic)
 	incrementedTopic := model.Topic{
 		StartChar:  topic.StartChar,
 		TopicPiece: topic.TopicPiece,
