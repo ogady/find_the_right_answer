@@ -102,13 +102,17 @@ func (r *TopicRepoImpl) FetchOnlyNumOfLikeByTopic(topic model.Topic) (model.NumO
 }
 
 func (r *TopicRepoImpl) UpdateTopicNumOfLike(topic model.Topic) (model.Topic, error) {
-	var resultTopic model.Topic
+	var resultTopic dynamoTopic
 	var err error
 
 	err = r.table.Update("StartChar", topic.StartChar.StartChar).Range("TopicPiece", topic.TopicPiece.TopicPiece).Set("NumOfLikes", &topic.NumOfLikes.NumOfLikes).Value(&resultTopic)
 	if err != nil {
-		return resultTopic, err
+		return topic, err
 	}
 
-	return resultTopic, nil
+	topic.StartChar.StartChar = resultTopic.StartChar
+	topic.TopicPiece.TopicPiece = resultTopic.TopicPiece
+	topic.NumOfLikes.NumOfLikes = resultTopic.NumOfLikes
+
+	return topic, nil
 }

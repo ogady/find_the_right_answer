@@ -27,10 +27,26 @@ type Query {
   topic: Topic!
 }
 
-input NewTopicPiece {
+input InputStartChar{
+  startChar: String!
+}
+
+input InputTopicPiece{
   topicPiece: String!
 }
 
-type Mutation {
-  addTopicPiece(input: NewTopicPiece!): TopicPiece
+input InputNumOfLikes{
+  numOfLikes: Int!
 }
+
+input InputTopic {
+  startChar: InputStartChar!
+  topicPiece: InputTopicPiece!
+  numOfLikes: InputNumOfLikes!
+}
+
+type Mutation {
+  addTopicPiece(input: InputTopicPiece!): TopicPiece,
+  likeTopic(input: InputTopic!): Topic,
+}
+  

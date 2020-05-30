@@ -4,15 +4,14 @@ services:
     build: ./
     ports:
       - 8080:8080
-    volumes:
-      - ./api:/go/src/github.com/ogady/find_the_right_answer/api
     environment:
       - ENV=dev
 
   dynamodblocal:
     image: amazon/dynamodb-local
+    command: -jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal/data/ -optimizeDbBeforeStartup
     volumes:
-      - volume-dynamodb_data:/home/dynamodblocal/data
+      - ./dynamodblocal/data:/home/dynamodblocal/data
     ports:
       - 8000:8002
 
@@ -28,5 +27,5 @@ services:
       - dynamodblocal
 
 volumes:
-  volume-dynamodb_data:
-    driver: "local"
+  dynamodblocal:
+    driver: local
