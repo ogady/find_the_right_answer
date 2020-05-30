@@ -1,4 +1,4 @@
-package model
+package adapter
 
 type Topic struct {
 	StartChar  StartChar  // 「startChar」で始まる
@@ -7,5 +7,5 @@ type Topic struct {
 }
 
 type NumOfLikes struct {
-	NumOfLikes uint
+	NumOfLikes int
 }
