@@ -7,5 +7,5 @@ type Topic struct {
 }
 
 type NumOfLikes struct {
-	NumOfLikes uint
+	NumOfLikes int
 }

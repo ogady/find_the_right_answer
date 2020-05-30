@@ -13,6 +13,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
 	"github.com/ogady/find_the_right_answer/api/domain/model"
+	"github.com/ogady/find_the_right_answer/api/interface/adapter"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -44,8 +45,8 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Mutation struct {
-		AddTopicPiece func(childComplexity int, input model.TopicPiece) int
-		LikeTopic     func(childComplexity int, input model.Topic) int
+		AddTopicPiece func(childComplexity int, input adapter.TopicPiece) int
+		LikeTopic     func(childComplexity int, input adapter.Topic) int
 	}
 
 	NumOfLikes struct {
@@ -72,8 +73,8 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	AddTopicPiece(ctx context.Context, input model.TopicPiece) (*model.TopicPiece, error)
-	LikeTopic(ctx context.Context, input model.Topic) (*model.Topic, error)
+	AddTopicPiece(ctx context.Context, input adapter.TopicPiece) (*model.TopicPiece, error)
+	LikeTopic(ctx context.Context, input adapter.Topic) (*model.Topic, error)
 }
 type QueryResolver interface {
 	Topic(ctx context.Context) (*model.Topic, error)
@@ -104,7 +105,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.AddTopicPiece(childComplexity, args["input"].(model.TopicPiece)), true
+		return e.complexity.Mutation.AddTopicPiece(childComplexity, args["input"].(adapter.TopicPiece)), true
 
 	case "Mutation.likeTopic":
 		if e.complexity.Mutation.LikeTopic == nil {
@@ -116,7 +117,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.LikeTopic(childComplexity, args["input"].(model.Topic)), true
+		return e.complexity.Mutation.LikeTopic(childComplexity, args["input"].(adapter.Topic)), true
 
 	case "NumOfLikes.numOfLikes":
 		if e.complexity.NumOfLikes.NumOfLikes == nil {
@@ -293,9 +294,9 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 func (ec *executionContext) field_Mutation_addTopicPiece_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.TopicPiece
+	var arg0 adapter.TopicPiece
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNInputTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐTopicPiece(ctx, tmp)
+		arg0, err = ec.unmarshalNInputTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋinterfaceᚋadapterᚐTopicPiece(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -307,9 +308,9 @@ func (ec *executionContext) field_Mutation_addTopicPiece_args(ctx context.Contex
 func (ec *executionContext) field_Mutation_likeTopic_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.Topic
+	var arg0 adapter.Topic
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNInputTopic2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐTopic(ctx, tmp)
+		arg0, err = ec.unmarshalNInputTopic2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋinterfaceᚋadapterᚐTopic(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -392,7 +393,7 @@ func (ec *executionContext) _Mutation_addTopicPiece(ctx context.Context, field g
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().AddTopicPiece(rctx, args["input"].(model.TopicPiece))
+		return ec.resolvers.Mutation().AddTopicPiece(rctx, args["input"].(adapter.TopicPiece))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -430,7 +431,7 @@ func (ec *executionContext) _Mutation_likeTopic(ctx context.Context, field graph
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().LikeTopic(rctx, args["input"].(model.Topic))
+		return ec.resolvers.Mutation().LikeTopic(rctx, args["input"].(adapter.Topic))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1806,8 +1807,8 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputInputNumOfLikes(ctx context.Context, obj interface{}) (model.NumOfLikes, error) {
-	var it model.NumOfLikes
+func (ec *executionContext) unmarshalInputInputNumOfLikes(ctx context.Context, obj interface{}) (adapter.NumOfLikes, error) {
+	var it adapter.NumOfLikes
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
@@ -1824,8 +1825,8 @@ func (ec *executionContext) unmarshalInputInputNumOfLikes(ctx context.Context, o
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputInputStartChar(ctx context.Context, obj interface{}) (model.StartChar, error) {
-	var it model.StartChar
+func (ec *executionContext) unmarshalInputInputStartChar(ctx context.Context, obj interface{}) (adapter.StartChar, error) {
+	var it adapter.StartChar
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
@@ -1842,27 +1843,27 @@ func (ec *executionContext) unmarshalInputInputStartChar(ctx context.Context, ob
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputInputTopic(ctx context.Context, obj interface{}) (model.Topic, error) {
-	var it model.Topic
+func (ec *executionContext) unmarshalInputInputTopic(ctx context.Context, obj interface{}) (adapter.Topic, error) {
+	var it adapter.Topic
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
 		switch k {
 		case "startChar":
 			var err error
-			it.StartChar, err = ec.unmarshalNInputStartChar2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐStartChar(ctx, v)
+			it.StartChar, err = ec.unmarshalNInputStartChar2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋinterfaceᚋadapterᚐStartChar(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "topicPiece":
 			var err error
-			it.TopicPiece, err = ec.unmarshalNInputTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐTopicPiece(ctx, v)
+			it.TopicPiece, err = ec.unmarshalNInputTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋinterfaceᚋadapterᚐTopicPiece(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "numOfLikes":
 			var err error
-			it.NumOfLikes, err = ec.unmarshalNInputNumOfLikes2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐNumOfLikes(ctx, v)
+			it.NumOfLikes, err = ec.unmarshalNInputNumOfLikes2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋinterfaceᚋadapterᚐNumOfLikes(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -1872,8 +1873,8 @@ func (ec *executionContext) unmarshalInputInputTopic(ctx context.Context, obj in
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputInputTopicPiece(ctx context.Context, obj interface{}) (model.TopicPiece, error) {
-	var it model.TopicPiece
+func (ec *executionContext) unmarshalInputInputTopicPiece(ctx context.Context, obj interface{}) (adapter.TopicPiece, error) {
+	var it adapter.TopicPiece
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
@@ -2349,19 +2350,19 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalNInputNumOfLikes2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐNumOfLikes(ctx context.Context, v interface{}) (model.NumOfLikes, error) {
+func (ec *executionContext) unmarshalNInputNumOfLikes2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋinterfaceᚋadapterᚐNumOfLikes(ctx context.Context, v interface{}) (adapter.NumOfLikes, error) {
 	return ec.unmarshalInputInputNumOfLikes(ctx, v)
 }
 
-func (ec *executionContext) unmarshalNInputStartChar2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐStartChar(ctx context.Context, v interface{}) (model.StartChar, error) {
+func (ec *executionContext) unmarshalNInputStartChar2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋinterfaceᚋadapterᚐStartChar(ctx context.Context, v interface{}) (adapter.StartChar, error) {
 	return ec.unmarshalInputInputStartChar(ctx, v)
 }
 
-func (ec *executionContext) unmarshalNInputTopic2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐTopic(ctx context.Context, v interface{}) (model.Topic, error) {
+func (ec *executionContext) unmarshalNInputTopic2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋinterfaceᚋadapterᚐTopic(ctx context.Context, v interface{}) (adapter.Topic, error) {
 	return ec.unmarshalInputInputTopic(ctx, v)
 }
 
-func (ec *executionContext) unmarshalNInputTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋdomainᚋmodelᚐTopicPiece(ctx context.Context, v interface{}) (model.TopicPiece, error) {
+func (ec *executionContext) unmarshalNInputTopicPiece2githubᚗcomᚋogadyᚋfind_the_right_answerᚋapiᚋinterfaceᚋadapterᚐTopicPiece(ctx context.Context, v interface{}) (adapter.TopicPiece, error) {
 	return ec.unmarshalInputInputTopicPiece(ctx, v)
 }
 

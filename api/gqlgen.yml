@@ -28,8 +28,10 @@ resolver:
 
 # gqlgen will search for any type names in the schema in these go packages
 # if they match it will use them, otherwise it will generate them.
-autobind:
-  - "github.com/ogady/find_the_right_answer/api/domain/model"
+
+# autobind は、models のフィールドでパス定義しているため、不要とする
+# autobind:
+  # - "github.com/ogady/find_the_right_answer/api/interface/adapter"
 
 # This section declares type mapping between the GraphQL and go type systems
 #
@@ -46,10 +48,10 @@ models:
   NumOfLikes:
     model: github.com/ogady/find_the_right_answer/api/domain/model.NumOfLikes
   InputTopic:
-    model: github.com/ogady/find_the_right_answer/api/domain/model.Topic
+    model: github.com/ogady/find_the_right_answer/api/interface/adapter.Topic
   InputTopicPiece:
-    model: github.com/ogady/find_the_right_answer/api/domain/model.TopicPiece
+    model: github.com/ogady/find_the_right_answer/api/interface/adapter.TopicPiece
   InputStartChar:
-    model: github.com/ogady/find_the_right_answer/api/domain/model.StartChar
+    model: github.com/ogady/find_the_right_answer/api/interface/adapter.StartChar
   InputNumOfLikes:
-    model: github.com/ogady/find_the_right_answer/api/domain/model.NumOfLikes
+    model: github.com/ogady/find_the_right_answer/api/interface/adapter.NumOfLikes
