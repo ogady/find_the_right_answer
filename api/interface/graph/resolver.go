@@ -7,6 +7,7 @@ import (
 	"context"
 
 	model "github.com/ogady/find_the_right_answer/api/domain/model"
+	"github.com/ogady/find_the_right_answer/api/interface/adapter"
 	"github.com/ogady/find_the_right_answer/api/interface/graph/generated"
 	"github.com/ogady/find_the_right_answer/api/usecase"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
@@ -14,23 +15,42 @@ import (
 
 type Resolver struct{}
 
-func (r *mutationResolver) AddTopicPiece(ctx context.Context, input model.TopicPiece) (*model.TopicPiece, error) {
+func (r *mutationResolver) AddTopicPiece(ctx context.Context, input adapter.TopicPiece) (*model.TopicPiece, error) {
+
+	inputTopicPiece := model.TopicPiece{
+		TopicPiece: input.TopicPiece,
+	}
+
 	//操作のタイミングを追跡するために子スパンを作成します。
 	addTopicPieceSpan, _ := tracer.StartSpanFromContext(ctx, "AddTopicPiece")
 	u := usecase.NewAddTopicPieceUsecase()
-	err := u.AddTopicPiece(&input)
+	topicPiece, err := u.AddTopicPiece(&inputTopicPiece)
 	if err != nil {
 		return nil, err
 	}
 	addTopicPieceSpan.Finish()
-	return nil, nil
+	return topicPiece, nil
 }
 
-func (r *mutationResolver) LikeTopic(ctx context.Context, input model.Topic) (*model.Topic, error) {
+func (r *mutationResolver) LikeTopic(ctx context.Context, input adapter.Topic) (*model.Topic, error) {
+
+	inputTopic := model.Topic{
+		StartChar: model.StartChar{
+			StartChar: input.StartChar.StartChar,
+		},
+		TopicPiece: model.TopicPiece{
+			TopicPiece: input.TopicPiece.TopicPiece,
+		},
+		NumOfLikes: model.NumOfLikes{
+			NumOfLikes: input.NumOfLikes.NumOfLikes,
+		},
+	}
+
 	//操作のタイミングを追跡するために子スパンを作成します。
 	likeTopicSpan, _ := tracer.StartSpanFromContext(ctx, "LikeTopic")
 	u := usecase.NewLikeTopicUsecase()
-	topic, err := u.LikeTopic(input)
+
+	topic, err := u.LikeTopic(inputTopic)
 	if err != nil {
 		return &topic, err
 	}

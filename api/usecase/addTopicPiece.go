@@ -17,14 +17,13 @@ func NewAddTopicPieceUsecase() addTopicPieceUsecase {
 	return addTopicPieceUsecase{topicPieceRepo: tpRepo}
 }
 
-func (r *addTopicPieceUsecase) AddTopicPiece(newTopicPiece *model.TopicPiece) error {
+func (r *addTopicPieceUsecase) AddTopicPiece(topicPiece *model.TopicPiece) (*model.TopicPiece, error) {
 	var err error
 
-	topicPiece := model.TopicPiece{
-		TopicPiece: newTopicPiece.TopicPiece,
+	err = r.topicPieceRepo.Save(topicPiece)
+	if err != nil {
+		return nil, err
 	}
 
-	err = r.topicPieceRepo.Save(&topicPiece)
-
-	return err
+	return topicPiece, err
 }
