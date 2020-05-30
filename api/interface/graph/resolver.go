@@ -24,12 +24,12 @@ func (r *mutationResolver) AddTopicPiece(ctx context.Context, input adapter.Topi
 	//操作のタイミングを追跡するために子スパンを作成します。
 	addTopicPieceSpan, _ := tracer.StartSpanFromContext(ctx, "AddTopicPiece")
 	u := usecase.NewAddTopicPieceUsecase()
-	err := u.AddTopicPiece(&inputTopicPiece)
+	topicPiece, err := u.AddTopicPiece(&inputTopicPiece)
 	if err != nil {
 		return nil, err
 	}
 	addTopicPieceSpan.Finish()
-	return &inputTopicPiece, nil
+	return topicPiece, nil
 }
 
 func (r *mutationResolver) LikeTopic(ctx context.Context, input adapter.Topic) (*model.Topic, error) {
