@@ -20,6 +20,7 @@ func NewLikeTopicUsecase() likeTopicUsecase {
 
 }
 
+// LikeTopic increments and updates NumOfLike
 func (r *likeTopicUsecase) LikeTopic(topic model.Topic) (model.Topic, error) {
 	var err error
 
