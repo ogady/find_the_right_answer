@@ -7,7 +7,8 @@
       "options": {
         "awslogs-group": "/ecs/FTRA-API-datadog-task",
         "awslogs-region": "ap-northeast-1",
-        "awslogs-stream-prefix": "ecs"
+        "awslogs-stream-prefix": "ecs",
+        "awslogs-create-group": "true"
       }
     },
     "memoryReservation": 256,
@@ -69,49 +70,5 @@
       "com.datadoghq.ad.check_names": "[\"FTRA-UI-container\"]",
       "com.datadoghq.ad.init_configs": "[{}]"
     }
-  },
-  {
-    "name": "datadog-agent",
-    "logConfiguration": {
-      "logDriver": "awslogs",
-      "options": {
-        "awslogs-group": "/ecs/FTRA-API-datadog-task",
-        "awslogs-region": "ap-northeast-1",
-        "awslogs-stream-prefix": "ecs"
-      }
-    },
-    "portMappings": [
-      {
-        "hostPort": 8125,
-        "protocol": "tcp",
-        "containerPort": 8125
-      }
-    ],
-    "environment": [
-      {
-        "name": "DD_API_KEY",
-        "value": "${dd-agent-key}"
-      },
-      {
-        "name": "DD_APM_ENABLED",
-        "value": "true"
-      },
-      {
-        "name": "DD_APM_NON_LOCAL_TRAFFIC",
-        "value": "true"
-      },
-      {
-        "name": "DD_PROCESS_AGENT_ENABLED",
-        "value": "true"
-      },
-      {
-        "name": "ECS_FARGATE",
-        "value": "true"
-      }
-    ],
-    "image": "datadog/agent:latest",
-    "essential": true,
-    "cpu": 10,
-    "memoryReservation": 256
   }
 ]
