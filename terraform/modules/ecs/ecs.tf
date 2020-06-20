@@ -3,7 +3,8 @@ variable "alb_terget_group_arn" {}
 variable "api_alb_terget_group_arn" {}
 variable "pri_sub_0_id" {}
 variable "pri_sub_1_id" {}
-variable "security_group_id" {}
+variable "security_group_80_id" {}
+variable "security_group_8080_id" {}
 variable "container_definitions" {}
 variable "self" {}
 
@@ -52,7 +53,8 @@ resource "aws_ecs_service" "ecs_service" {
     ]
 
     security_groups = [
-      var.security_group_id
+      var.security_group_80_id,
+      var.security_group_8080_id
     ]
   }
 }

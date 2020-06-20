@@ -4,7 +4,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "find-the-right-answer-dev-tfstate"
+    bucket = "ftra-dev-tfstates"
     key    = "dev/app/terraform.tfstate"
     region = "ap-northeast-1"
   }

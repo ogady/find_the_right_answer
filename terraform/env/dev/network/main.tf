@@ -18,20 +18,26 @@ module "alb" {
   pub_sub_1_id        = module.subnet.pub_sub_1_id
   pri_sub_0_id        = module.subnet.pri_sub_0_id
   pri_sub_1_id        = module.subnet.pri_sub_1_id
-  pri_app_sg          = module.pri_app_sg.security_group_id
   https_sg_id         = module.https_sg.security_group_id
   http_redirect_sg_id = module.http_redirect_sg.security_group_id
   certificate_arn     = module.route53.certificate_arn
 }
 
-module "pri_app_sg" {
+module "pri_app_sg_80" {
   source      = "../../../modules/security_group"
-  name        = "pri_app_sg"
+  name        = "pri_app_sg_80"
   vpc_id      = module.vpc.vpc_id
   port        = 80
   cidr_blocks = [module.subnet.pub_sub_0_cidr, module.subnet.pub_sub_1_cidr]
 }
 
+module "pri_app_sg_8080" {
+  source      = "../../../modules/security_group"
+  name        = "pri_app_sg_8080"
+  vpc_id      = module.vpc.vpc_id
+  port        = 8080
+  cidr_blocks = [module.subnet.pub_sub_0_cidr, module.subnet.pub_sub_1_cidr]
+}
 
 module "https_sg" {
   source      = "../../../modules/security_group"

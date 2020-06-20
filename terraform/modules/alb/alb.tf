@@ -4,7 +4,6 @@ variable "pub_sub_0_id" {}
 variable "pub_sub_1_id" {}
 variable "pri_sub_0_id" {}
 variable "pri_sub_1_id" {}
-variable "pri_app_sg" {}
 variable "https_sg_id" {}
 variable "http_redirect_sg_id" {}
 variable "certificate_arn" {}

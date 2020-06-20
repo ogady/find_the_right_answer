@@ -23,7 +23,8 @@ module "ecs" {
   api_alb_terget_group_arn = data.terraform_remote_state.network.outputs.api_alb_terget_group_arn
   pri_sub_0_id             = data.terraform_remote_state.network.outputs.pri_sub_0_id
   pri_sub_1_id             = data.terraform_remote_state.network.outputs.pri_sub_1_id
-  security_group_id        = data.terraform_remote_state.network.outputs.pri_app_security_group_id
+  security_group_80_id     = data.terraform_remote_state.network.outputs.pri_app_security_group_id
+  security_group_8080_id   = data.terraform_remote_state.network.outputs.pri_app_security_group_8080_id
   container_definitions    = data.template_file.service_task_definition_json.rendered
 }
 

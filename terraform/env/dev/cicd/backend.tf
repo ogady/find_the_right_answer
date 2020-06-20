@@ -4,10 +4,11 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "ftra-dev-tfstates"
-    key    = "dev/network/terraform.tfstate"
+    bucket = "find-the-right-answer-dev-tfstate"
+    key    = "dev/cicd/terraform.tfstate"
     region = "ap-northeast-1"
   }
+
   # backend "local" {
   #   path = "terraform.tfstate"
   # }
