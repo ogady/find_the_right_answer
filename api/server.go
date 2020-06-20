@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"os"
 	"time"
 
 	"github.com/99designs/gqlgen/handler"
@@ -11,8 +10,6 @@ import (
 	"github.com/ogady/find_the_right_answer/api/config"
 	"github.com/ogady/find_the_right_answer/api/interface/graph"
 	"github.com/ogady/find_the_right_answer/api/interface/graph/generated"
-	gintrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/gin-gonic/gin"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 // Defining the Graphql handler
@@ -35,8 +32,8 @@ func playgroundHandler() gin.HandlerFunc {
 
 func main() {
 
-	tracer.Start(tracer.WithEnv(os.Getenv("ENV")))
-	defer tracer.Stop()
+	// tracer.Start(tracer.WithEnv(os.Getenv("ENV")))
+	// defer tracer.Stop()
 
 	err := config.InitConf()
 
@@ -45,31 +42,33 @@ func main() {
 	}
 
 	r := gin.Default()
-	r.Use(gintrace.Middleware("FTRA-API"), cors.New(cors.Config{
-		// 許可したいHTTPメソッドの一覧
-		AllowMethods: []string{
-			"POST",
-			"GET",
-			"OPTIONS",
-			"PUT",
-			"DELETE",
-		},
-		// 許可したいHTTPリクエストヘッダの一覧
-		AllowHeaders: []string{
-			"Access-Control-Allow-Headers",
-			"Content-Type",
-			"Content-Length",
-			"Accept-Encoding",
-			"X-CSRF-Token",
-			"Authorization",
-		},
-		// 許可したいアクセス元の一覧
-		AllowOrigins: []string{
-			"*",
-		},
+	r.Use(
+		// gintrace.Middleware("FTRA-API"),
+		cors.New(cors.Config{
+			// 許可したいHTTPメソッドの一覧
+			AllowMethods: []string{
+				"POST",
+				"GET",
+				"OPTIONS",
+				"PUT",
+				"DELETE",
+			},
+			// 許可したいHTTPリクエストヘッダの一覧
+			AllowHeaders: []string{
+				"Access-Control-Allow-Headers",
+				"Content-Type",
+				"Content-Length",
+				"Accept-Encoding",
+				"X-CSRF-Token",
+				"Authorization",
+			},
+			// 許可したいアクセス元の一覧
+			AllowOrigins: []string{
+				"*",
+			},
 
-		MaxAge: 24 * time.Hour,
-	}))
+			MaxAge: 24 * time.Hour,
+		}))
 
 	r.POST("/api", graphqlHandler())
 	r.GET("/playground", playgroundHandler())
