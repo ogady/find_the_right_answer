@@ -10,7 +10,6 @@ import (
 	"github.com/ogady/find_the_right_answer/api/interface/adapter"
 	"github.com/ogady/find_the_right_answer/api/interface/graph/generated"
 	"github.com/ogady/find_the_right_answer/api/usecase"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 type Resolver struct{}
@@ -22,13 +21,13 @@ func (r *mutationResolver) AddTopicPiece(ctx context.Context, input adapter.Topi
 	}
 
 	//操作のタイミングを追跡するために子スパンを作成します。
-	addTopicPieceSpan, _ := tracer.StartSpanFromContext(ctx, "AddTopicPiece")
+	// addTopicPieceSpan, _ := tracer.StartSpanFromContext(ctx, "AddTopicPiece")
 	u := usecase.NewAddTopicPieceUsecase()
 	topicPiece, err := u.AddTopicPiece(&inputTopicPiece)
 	if err != nil {
 		return nil, err
 	}
-	addTopicPieceSpan.Finish()
+	// addTopicPieceSpan.Finish()
 	return topicPiece, nil
 }
 
@@ -47,27 +46,27 @@ func (r *mutationResolver) LikeTopic(ctx context.Context, input adapter.Topic) (
 	}
 
 	//操作のタイミングを追跡するために子スパンを作成します。
-	likeTopicSpan, _ := tracer.StartSpanFromContext(ctx, "LikeTopic")
+	// likeTopicSpan, _ := tracer.StartSpanFromContext(ctx, "LikeTopic")
 	u := usecase.NewLikeTopicUsecase()
 
 	topic, err := u.LikeTopic(inputTopic)
 	if err != nil {
 		return &topic, err
 	}
-	likeTopicSpan.Finish()
+	// likeTopicSpan.Finish()
 	return &topic, nil
 }
 
 func (r *queryResolver) Topic(ctx context.Context) (*model.Topic, error) {
 	//操作のタイミングを追跡するために子スパンを作成します。
-	createTopicSpan, _ := tracer.StartSpanFromContext(ctx, "createTopic")
+	// createTopicSpan, _ := tracer.StartSpanFromContext(ctx, "createTopic")
 
 	u := usecase.NewCreateTopicUsecase()
 	topic, err := u.CreateTopic()
 	if err != nil {
 		return nil, err
 	}
-	createTopicSpan.Finish()
+	// createTopicSpan.Finish()
 	return &topic, nil
 }
 

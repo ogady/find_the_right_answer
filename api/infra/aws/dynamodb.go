@@ -8,7 +8,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/guregu/dynamo"
 	"github.com/ogady/find_the_right_answer/api/config"
-	awstrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/aws/aws-sdk-go/aws"
 )
 
 func NewDynamoDBConn() *dynamo.DB {
@@ -26,7 +25,7 @@ func NewDynamoDBConn() *dynamo.DB {
 		sess = session.Must(session.NewSession(&aws.Config{
 			Region: aws.String(config.DynamoDB.Region),
 		}))
-		sess = awstrace.WrapSession(sess)
+		// sess = awstrace.WrapSession(sess)
 		db = dynamo.New(sess)
 
 	} else {
@@ -40,7 +39,7 @@ func NewDynamoDBConn() *dynamo.DB {
 				config.DynamoDB.SessionToken,
 			),
 		}))
-		sess = awstrace.WrapSession(sess)
+		// sess = awstrace.WrapSession(sess)
 		db = dynamo.New(sess)
 
 	}
